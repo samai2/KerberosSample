@@ -2,18 +2,18 @@
 Application for console output contents of the protected with Kerberos URL.
 
 For authorization, the application can use a ticket stored in the cache
- or request a new ticket from the KDC defined in krb5. conf
+ or requests a new ticket from the KDC defined in krb5. conf
 
 ## Install
 Place the auth.config configuration file next to the executable file. 
 
-If the application runned not on Windows, or runned under a user other than the user who should log in on the remote server, an additional krb5.conf configuration file is required to determine the KDC for ticket request.
-(MIT Kerberos Documentation [krb5.conf](https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html).) File krb5.conf have to locate next to the executable jar.
+If the application isn't run on Windows, or run under a user other than the user who should log in on the remote server, an additional krb5.conf configuration file is required to determine the KDC for ticket request.
+(MIT Kerberos Documentation [krb5.conf](https://web.mit.edu/kerberos/krb5-1.12/doc/admin/conf_files/krb5_conf.html).) File krb5.conf should be placed next to the executable jar.
  
 ## Run
-Application could be runned in two modes:
- 1)	Gets content for a specific URL
- 2)	Gets AlcUserID from specified OpenTouch server
+Application can be run in two modes:
+ 1)	Get content for a specific URL
+ 2)	Get AlcUserID from specified OpenTouch server
 
 If there are no tickets on cache or tickets are not valid, application will ask input username and password for obtaining valid ticket.  
 ### Gets content for a specific URL
