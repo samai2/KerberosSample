@@ -3,9 +3,7 @@ package org.example;
 import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
+import java.net.*;
 import java.security.PrivilegedAction;
 import java.security.cert.X509Certificate;
 
@@ -31,7 +29,22 @@ public class App {
             return null;
         });
 
+        openSessionOnOT();
+
         System.out.println("\n \n Done");
+    }
+
+    /**
+     * Asks protected method of OT REST API
+     * It is Example how to make request to protected REST API methods
+     *
+     * @throws Exception - if the session opening was unsuccessful
+     */
+    private static void openSessionOnOT() throws Exception {
+        String content = "{\"applicationName\":\"REST_TEST\"}";
+
+        String r = HttpClient.doPost("https://ot3net.ecc.tlab.alcatel.ru/api/rest/1.0/sessions", content);
+        System.out.println(r);
     }
 
     /**
@@ -69,11 +82,8 @@ public class App {
         while (getConnectionCounter < 4) {
             try {
                 System.out.println("Test of LOGIN to URL \n" + " please input server's DNS name (eg ot3net.ecc.tlab.alcatel.ru)");
-                String userInput = new BufferedReader(new InputStreamReader(System.in)).readLine();
-                userInput = userInput.isEmpty() ? "ot3net.ecc.tlab.alcatel.ru" : userInput;
-                if (userInput.matches("\\b([a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}\\b")) {
-                    return "https://" + userInput + "/authenticationform/login?AlcApplicationUrl=/api/rest/authenticate%3fversion=1.0";
-                }
+                String userInput = "ot3net.ecc.tlab.alcatel.ru";
+                return "https://" + userInput + "/authenticationform/login?AlcApplicationUrl=/api/rest/authenticate%3fversion=1.0";
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
                 return requestUserInput();
@@ -82,14 +92,18 @@ public class App {
         throw new Exception("The try limit exceeded");
     }
 
+    static CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+
     /**
      * Allows store cookies during request with redirection.
-     *
-     *  For purposes when a requested URL do redirect to URL with cookies authentication.
-     *  For example http://authrithationServer.company.com/authentication/login?redirect=/api/sessions
+     * <p>
+     * For purposes when a requested URL do redirect to URL with cookies authentication.
+     * For example http://authrithationServer.company.com/authentication/login?redirect=/api/sessions
      */
     static private void acceptAllCookies() {
-        CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
+
+        CookieHandler.setDefault(cookieManager);
+
     }
 
 
